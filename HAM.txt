@@ -1,0 +1,98 @@
+#include <iostream>
+#include <math.h>
+#include <iomanip>
+using namespace std;
+int main()
+{
+	setlocale(LC_ALL, "rus");
+	int kriteriev; //переменная количества критериев
+	cout << "Введите кол-во критериев: ";
+	cin >> kriteriev; // ввод переменной
+	double** arr = new double* [kriteriev + 2];   // создаем двумерный массив
+	for (int i = 0; i < kriteriev + 2; i++) {
+		arr[i] = new double[kriteriev + 2];
+	}
+	for (int i = 0; i < kriteriev; i++) // ввод входных данных
+	{
+		for (int j = i + 1; j < kriteriev; j++)
+		{
+			cout << "Введите коэффициент" << "(" << i + 1 << ")" << "(" << j + 1 << ")"  ":";
+			cin >> arr[i][j];
+		}
+	}
+	for (int i = 0; i < kriteriev; i++) // 1 по главной диагонали
+	{
+		for (int j = 0; j < kriteriev; j++)
+		{
+			arr[i][i] = 1;
+		}
+	} 
+	for (int j = 0; j < kriteriev; j++) // расчет остальных коэффициентов
+	{
+		for (int i = j + 1; i < kriteriev; i++)
+		{
+			arr[i][j] = 1 / arr[j][i];
+		}
+	} 
+	
+
+	for (int i = 0; i < kriteriev; i++) //расчет суммы по строке
+	{
+		arr[i][kriteriev] = 0;
+		for (int j = 0; j < kriteriev; j++)
+		{
+			arr[i][kriteriev] += arr[i][j];
+		}
+	}
+	double summ = 0;
+	double summcoef = 0;
+	for (int i = 0; i < kriteriev; i++) //расчет суммы всех критериев
+	{
+
+		for (int j = 0; j < kriteriev; j++)
+		{
+		}
+		summ += arr[i][kriteriev];
+	}
+	
+	for (int i = 0; i < kriteriev; i++) //расчет весовых коэффициентов
+	{
+		for (int j = 0; j < kriteriev; j++)
+		{
+			arr[i][kriteriev + 1] = arr[i][kriteriev] / summ;
+		}
+	}
+
+	for (int i = 0; i < kriteriev; i++) //расчет суммы весовых коэффициентов
+	{
+
+		for (int j = 0; j < kriteriev; j++)
+		{
+		}
+		summcoef += arr[i][kriteriev + 1];
+	}
+
+	cout << endl;
+	//вывод 
+	for (int i = 0; i < kriteriev; i++)
+	{	
+		
+		for (int j = 0; j < kriteriev + 2; j++)
+		{
+			if (j == kriteriev + 1)
+			{
+				cout << setw(5) << round(arr[i][j] * 100) / 100;
+			}
+			else
+			{
+				cout << setw(5) << round(arr[i][j] * 100) / 100 << " | ";
+			}
+
+		}
+		cout << endl;
+	}
+	cout << "\nСумма по строкам = " << round(summ * 100) / 100 << endl; //вывод суммы по строкам
+	cout << "\nСумма весовых коэффициентов  = " << round(summcoef * 100) / 100 << endl;
+
+	return 0;
+}
